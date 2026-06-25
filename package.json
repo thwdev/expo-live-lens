@@ -2,7 +2,7 @@
   "name": "expo-live-lens",
   "version": "0.1.0",
   "private": true,
-  "description": "A lightweight Radon-like live companion for Expo Go and React Native development.",
+  "description": "Open-source AI devtools for Expo Go and React Native: screenshots, logs, network events, replay sessions, and prompts for Codex and Claude.",
   "homepage": "https://github.com/thwdev/expo-live-lens#readme",
   "bugs": {
     "url": "https://github.com/thwdev/expo-live-lens/issues"
@@ -23,6 +23,14 @@
     "dev:demo:offline": "npm.cmd --prefix examples/demo-expo run start:offline",
     "review:summary": "node scripts/pull-summary.mjs",
     "review:pull": "node scripts/pull-review-packet.mjs",
+    "review:prompt": "node scripts/pull-review-prompt.mjs",
+    "review:mobile": "node scripts/pull-review-prompt.mjs mobile",
+    "mobile:insights": "node scripts/pull-mobile-insights.mjs",
+    "timeline:pull": "node scripts/pull-timeline.mjs",
+    "capture:now": "node scripts/request-capture.mjs codex",
+    "session:start": "node scripts/session.mjs start",
+    "session:stop": "node scripts/session.mjs stop",
+    "session:pull": "node scripts/session.mjs pull",
     "review:now": "node scripts/pull-review-packet.mjs --now",
     "setup:app": "node scripts/setup-expo-app.mjs",
     "start": "node src/server.mjs",
@@ -30,10 +38,19 @@
   },
   "keywords": [
     "expo",
+    "expo-go",
+    "expo-router",
     "react-native",
     "devtools",
+    "mobile-devtools",
+    "debugging",
+    "inspector",
     "ai",
-    "debugging"
+    "codex",
+    "claude",
+    "ai-coding",
+    "screenshots",
+    "radon-alternative"
   ],
   "license": "MIT"
 }

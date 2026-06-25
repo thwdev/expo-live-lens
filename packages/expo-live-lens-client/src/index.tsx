@@ -23,6 +23,7 @@ export type LiveLensOptions = {
   captureScreenshots?: boolean;
   screenshotQuality?: number;
   captureNetwork?: boolean;
+  dedupeScreenshots?: boolean;
   enabled?: boolean;
   deviceName?: string;
   metadata?: LiveLensPayload;
@@ -73,6 +74,10 @@ function serializeValue(value: unknown): JsonValue {
   } catch {
     return String(value);
   }
+}
+
+function createImageFingerprint(base64Image: string) {
+  return `${base64Image.length}:${base64Image.slice(0, 48)}:${base64Image.slice(-48)}`;
 }
 
 export function useLiveLens(options: LiveLensOptions) {
@@ -235,6 +240,29 @@ function useAppStateBridge(send: (event: LiveLensEvent) => void, enabled: boolea
   }, [enabled, send]);
 }
 
+function useRouteBridge(
+  send: (event: LiveLensEvent) => void,
+  enabled: boolean,
+  screenName?: string,
+  route?: string,
+  routeParams?: LiveLensPayload
+) {
+  useEffect(() => {
+    if (!enabled) {
+      return;
+    }
+
+    send({
+      type: "route",
+      screenName,
+      payload: {
+        route,
+        routeParams: serializeValue(routeParams)
+      }
+    });
+  }, [enabled, route, routeParams, screenName, send]);
+}
+
 type FetchInput = Parameters<typeof fetch>[0];
 type FetchInit = Parameters<typeof fetch>[1];
 
@@ -320,7 +348,8 @@ export function LiveLensRoot(props: PropsWithChildren<LiveLensOptions>) {
     captureIntervalMs = 2500,
     commandPollIntervalMs = 1000,
     captureScreenshots = true,
-    screenshotQuality = 0.58
+    screenshotQuality = 0.58,
+    dedupeScreenshots = true
   } = props;
   const rootRef = useRef<View>(null);
   const lens = useLiveLens(props);
@@ -331,6 +360,7 @@ export function LiveLensRoot(props: PropsWithChildren<LiveLensOptions>) {
   useConsoleBridge(send, active);
   useGlobalErrorBridge(send, active);
   useAppStateBridge(send, active);
+  useRouteBridge(send, active, props.screenName, props.route, props.routeParams);
   useNetworkBridge(send, active, serverUrl, props.captureNetwork);
 
   useEffect(() => {
@@ -341,6 +371,7 @@ export function LiveLensRoot(props: PropsWithChildren<LiveLensOptions>) {
     let disposed = false;
     let captureInFlight = false;
     let latestCaptureRequestId: string | null = null;
+    let lastFingerprint: string | null = null;
 
     const capture = async (reason: CaptureReason) => {
       if (!rootRef.current || disposed || captureInFlight || AppState.currentState !== "active") {
@@ -355,16 +386,33 @@ export function LiveLensRoot(props: PropsWithChildren<LiveLensOptions>) {
           quality: screenshotQuality,
           result: "base64"
         });
+        const fingerprint = createImageFingerprint(image);
+
+        if (dedupeScreenshots && fingerprint === lastFingerprint) {
+          await send({
+            type: "screenshot-skip",
+            payload: {
+              reason: "duplicate",
+              captureMode,
+              captureReason: reason,
+              fingerprint
+            }
+          });
+          return;
+        }
+
+        lastFingerprint = fingerprint;
 
         await send({
           type: "screenshot",
           image: `data:image/jpeg;base64,${image}`,
           payload: {
-            width: "root",
+            target: "root",
             captureIntervalMs: interval,
             screenshotQuality,
             captureMode,
-            captureReason: reason
+            captureReason: reason,
+            fingerprint
           }
         });
       } catch (error) {
@@ -431,7 +479,17 @@ export function LiveLensRoot(props: PropsWithChildren<LiveLensOptions>) {
         dispose();
       }
     };
-  }, [active, captureMode, captureScreenshots, commandPollIntervalMs, interval, screenshotQuality, send, serverUrl]);
+  }, [
+    active,
+    captureMode,
+    captureScreenshots,
+    commandPollIntervalMs,
+    dedupeScreenshots,
+    interval,
+    screenshotQuality,
+    send,
+    serverUrl
+  ]);
 
   return (
     <View ref={rootRef} collapsable={false} style={{ flex: 1 }}>

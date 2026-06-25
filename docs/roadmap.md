@@ -18,7 +18,8 @@ the screenshot, and edit code.
 
 ## Milestone 2: Frictionless Setup
 
-- Improve `setup:app` to detect `App.tsx`, `app/_layout.tsx`, and Expo Router
+- Add project-local Codex run actions for dashboard, demo, and review flows
+- Improve `setup:app` to cover more entrypoint patterns beyond the current heuristic auto-wrap
 - Add safer AST-based wrapper insertion
 - Print LAN URL and firewall hints
 - Add Windows, macOS, and Linux setup notes
@@ -27,10 +28,13 @@ the screenshot, and edit code.
 ## Milestone 3: Better AI Context
 
 - Expand `/api/summary` with richer route, performance, and interaction context
+- Use `/api/mobile-insights` as the main AI planning layer for issues, quality gates, and next actions
+- Expand `/api/timeline` and screenshot history into named replay sessions
+- Add retention controls for persisted recorded sessions
 - Add route context helper for Expo Router
 - Add network event filtering and redaction
 - Add console log levels and search
-- Add "copy Codex prompt" dashboard action
+- Add replay-aware prompts and source-file hints
 
 ## Milestone 4: Developer Experience
 

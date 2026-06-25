@@ -10,6 +10,8 @@ The helper:
 
 - checks that the target has an Expo dependency
 - copies the Live Lens client to `src/dev/live-lens.tsx`
+- tries to auto-wrap `App.tsx` or `app/_layout.tsx`
+- writes a `.expo-live-lens.bak` backup before touching the entry file
 - writes `LIVE_LENS_SETUP.md` into the target app with a ready-to-paste wrapper snippet
 - detects a likely LAN IP for physical-device testing
 
@@ -19,7 +21,7 @@ Then install the screenshot dependency in the target Expo app:
 npx expo install react-native-view-shot
 ```
 
-Wrap your app root with `LiveLensRoot`. For phones, use the LAN URL shown by the setup helper instead of `localhost`.
+If auto-wrap is skipped, use the generated `LIVE_LENS_SETUP.md` file and wrap your app root with `LiveLensRoot` manually. For phones, use the LAN URL shown by the setup helper instead of `localhost`.
 
 ## Why Copy The Client?
 

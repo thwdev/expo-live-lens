@@ -1,0 +1,4 @@
+interface:
+  display_name: "Expo Live Lens"
+  short_description: "AI live review workflow for Expo Go apps"
+  default_prompt: "Use $expo-live-lens to inspect my running Expo Go app and suggest the next best mobile development improvements."

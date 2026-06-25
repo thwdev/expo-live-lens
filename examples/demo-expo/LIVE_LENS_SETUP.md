@@ -12,7 +12,18 @@ npx expo install react-native-view-shot
 npm.cmd run dev
 ```
 
-3. Wrap your app root.
+3. Set your phone-facing server URL:
+
+```bash
+$env:EXPO_PUBLIC_LIVE_LENS_URL="http://YOUR_COMPUTER_IP:4317"
+```
+
+4. Auto-wrap status.
+
+- No automatic wrapper inserted: LiveLensRoot already present
+- Use the wrapper snippet below if you want to wire it in manually.
+
+## Manual wrapper snippet
 
 For App.tsx:
 
@@ -22,11 +33,10 @@ import { LiveLensRoot } from "./src/dev/live-lens";
 export default function App() {
   return (
     <LiveLensRoot
-      serverUrl="http://YOUR_COMPUTER_IP:4317"
+      serverUrl={process.env.EXPO_PUBLIC_LIVE_LENS_URL || "http://YOUR_COMPUTER_IP:4317"}
       screenName="App"
       route="/"
       captureMode="manual"
-      captureIntervalMs={2500}
       screenshotQuality={0.58}
       captureNetwork
     >
@@ -45,11 +55,10 @@ import { LiveLensRoot } from "../src/dev/live-lens";
 export default function RootLayout() {
   return (
     <LiveLensRoot
-      serverUrl="http://YOUR_COMPUTER_IP:4317"
+      serverUrl={process.env.EXPO_PUBLIC_LIVE_LENS_URL || "http://YOUR_COMPUTER_IP:4317"}
       screenName="Root"
       route="/"
       captureMode="manual"
-      captureIntervalMs={2500}
       screenshotQuality={0.58}
       captureNetwork
     >

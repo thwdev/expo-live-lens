@@ -7,24 +7,34 @@
     <style>
       :root {
         color-scheme: light dark;
-        --bg: #f6f7f9;
+        --bg: #f4f6f8;
         --panel: #ffffff;
-        --text: #15171a;
-        --muted: #657080;
-        --line: #dfe3e8;
-        --accent: #1264d8;
+        --panel-alt: #f8fafc;
+        --text: #14181f;
+        --muted: #667085;
+        --line: #d8dee7;
+        --accent: #1d63d8;
+        --accent-soft: #eef4ff;
         --danger: #b42318;
+        --danger-soft: #fff2f0;
+        --ok: #067647;
+        --ok-soft: #ecfdf3;
       }
 
       @media (prefers-color-scheme: dark) {
         :root {
-          --bg: #111316;
-          --panel: #191c20;
-          --text: #eef1f4;
+          --bg: #0f1216;
+          --panel: #171b20;
+          --panel-alt: #11151a;
+          --text: #edf2f7;
           --muted: #9aa4b2;
-          --line: #2b3037;
-          --accent: #6ea8ff;
-          --danger: #ff8a7a;
+          --line: #2a313a;
+          --accent: #78a9ff;
+          --accent-soft: rgba(120, 169, 255, 0.12);
+          --danger: #ff9b8f;
+          --danger-soft: rgba(255, 155, 143, 0.12);
+          --ok: #7ee2b8;
+          --ok-soft: rgba(126, 226, 184, 0.12);
         }
       }
 
@@ -36,30 +46,42 @@
         margin: 0;
         background: var(--bg);
         color: var(--text);
-        font: 14px/1.45 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font: 14px/1.5 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       }
 
       header {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: space-between;
-        gap: 16px;
-        padding: 16px 20px;
+        gap: 20px;
+        padding: 18px 20px;
         border-bottom: 1px solid var(--line);
         background: var(--panel);
       }
 
-      h1 {
+      h1,
+      h2,
+      h3,
+      p {
         margin: 0;
-        font-size: 18px;
-        font-weight: 700;
+      }
+
+      h1 {
+        font-size: 20px;
+        font-weight: 800;
       }
 
       main {
         display: grid;
-        grid-template-columns: minmax(280px, 420px) minmax(0, 1fr);
+        grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
         gap: 16px;
         padding: 16px;
+      }
+
+      .sidebar {
+        display: grid;
+        gap: 16px;
+        align-content: start;
       }
 
       .panel {
@@ -71,38 +93,333 @@
       }
 
       .panel h2 {
-        margin: 0;
         padding: 12px 14px;
         border-bottom: 1px solid var(--line);
         font-size: 13px;
         text-transform: uppercase;
-        letter-spacing: 0;
         color: var(--muted);
+      }
+
+      .summary {
+        display: grid;
+        gap: 12px;
+        padding: 14px;
+      }
+
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .summary-card {
+        padding: 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel-alt);
+      }
+
+      .summary-card strong {
+        display: block;
+        margin-top: 4px;
+        font-size: 16px;
+      }
+
+      .eyebrow {
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      .hint-list {
+        display: grid;
+        gap: 8px;
+      }
+
+      .hint {
+        padding: 10px 12px;
+        border-radius: 8px;
+        background: var(--accent-soft);
+        color: var(--text);
+      }
+
+      .step-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .step {
+        display: grid;
+        gap: 6px;
+        padding: 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel-alt);
+      }
+
+      .step-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .step-status {
+        padding: 4px 8px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      .step-status.done {
+        background: var(--ok-soft);
+        color: var(--ok);
+      }
+
+      .step-status.waiting {
+        background: var(--accent-soft);
+        color: var(--accent);
+      }
+
+      .step-copy {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .coach-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .coach-item {
+        display: grid;
+        gap: 6px;
+        padding: 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel-alt);
+      }
+
+      .coach-item.high {
+        border-color: color-mix(in srgb, var(--danger) 45%, var(--line));
+        background: var(--danger-soft);
+      }
+
+      .coach-item.medium {
+        border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
+      }
+
+      .coach-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        font-weight: 800;
+      }
+
+      .coach-detail {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .gate-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .gate {
+        padding: 8px 10px;
+        border-radius: 8px;
+        background: var(--panel-alt);
+        border: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .gate.pass {
+        background: var(--ok-soft);
+        color: var(--ok);
+      }
+
+      .timeline-list {
+        display: grid;
+        gap: 8px;
+      }
+
+      .timeline-item {
+        display: grid;
+        grid-template-columns: 9px minmax(0, 1fr);
+        gap: 10px;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .timeline-dot {
+        width: 9px;
+        height: 9px;
+        margin-top: 6px;
+        border-radius: 999px;
+        background: var(--accent);
+      }
+
+      .timeline-dot.error {
+        background: var(--danger);
+      }
+
+      .timeline-dot.screenshot {
+        background: var(--ok);
+      }
+
+      .timeline-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        font-weight: 800;
+      }
+
+      .timeline-detail {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .prompt-bar {
+        display: grid;
+        gap: 10px;
+      }
+
+      .prompt-modes,
+      .tabs,
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .actions {
+        justify-content: flex-end;
+      }
+
+      button {
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        background: var(--panel);
+        color: var(--text);
+        padding: 8px 10px;
+        cursor: pointer;
+      }
+
+      button.active {
+        border-color: color-mix(in srgb, var(--accent) 50%, var(--line));
+        background: var(--accent-soft);
+        color: var(--accent);
       }
 
       .preview {
         display: grid;
         place-items: center;
-        min-height: 560px;
+        min-height: 420px;
         padding: 14px;
+      }
+
+      .preview.compare {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: start;
+        gap: 12px;
+      }
+
+      .compare-frame {
+        display: grid;
+        gap: 8px;
+        width: 100%;
+      }
+
+      .compare-frame .chip {
+        justify-self: start;
       }
 
       .preview img {
         max-width: 100%;
-        max-height: 76vh;
+        max-height: 70vh;
         border: 1px solid var(--line);
         border-radius: 8px;
         background: #000;
       }
 
-      .empty {
+      .empty,
+      .status {
         color: var(--muted);
-        text-align: center;
+      }
+
+      .meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 0 14px 14px;
+      }
+
+      .screenshot-strip {
+        display: flex;
+        gap: 8px;
+        overflow: auto;
+        padding: 0 14px 14px;
+      }
+
+      .shot-thumb {
+        flex: 0 0 72px;
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        background: var(--panel-alt);
+        padding: 3px;
+        cursor: pointer;
+      }
+
+      .shot-thumb.active {
+        border-color: var(--accent);
+      }
+
+      .shot-thumb img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 9 / 16;
+        object-fit: cover;
+        border-radius: 5px;
+        background: #000;
+      }
+
+      .chip {
+        padding: 5px 8px;
+        border-radius: 999px;
+        background: var(--panel-alt);
+        border: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 12px;
       }
 
       .events {
-        height: calc(100vh - 116px);
+        height: calc(100vh - 140px);
         overflow: auto;
+      }
+
+      .event-toolbar {
+        display: flex;
+        gap: 10px;
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .search-input {
+        width: 100%;
+        min-height: 36px;
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        background: var(--panel);
+        color: var(--text);
+        padding: 8px 10px;
+        font: inherit;
       }
 
       .event {
@@ -133,53 +450,34 @@
         padding: 10px;
         border: 1px solid var(--line);
         border-radius: 6px;
-        background: color-mix(in srgb, var(--bg) 82%, var(--panel));
+        background: var(--panel-alt);
         white-space: pre-wrap;
         word-break: break-word;
       }
 
-      .status {
+      .health {
+        padding: 0 14px 14px;
         color: var(--muted);
-        font-size: 13px;
+        font-size: 12px;
       }
 
-      .actions {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: flex-end;
-        gap: 8px;
-      }
-
-      .tabs {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        padding: 10px 12px;
-        border-bottom: 1px solid var(--line);
-      }
-
-      button {
-        border: 1px solid var(--line);
-        border-radius: 7px;
-        background: var(--panel);
-        color: var(--text);
-        padding: 8px 10px;
-        cursor: pointer;
-      }
-
-      button.active {
-        border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
-        background: color-mix(in srgb, var(--accent) 12%, var(--panel));
-        color: var(--accent);
-      }
-
-      @media (max-width: 900px) {
+      @media (max-width: 980px) {
+        header,
         main {
           grid-template-columns: 1fr;
         }
 
+        header {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .actions {
+          justify-content: flex-start;
+        }
+
         .events {
-          height: 420px;
+          height: 440px;
         }
       }
     </style>
@@ -188,33 +486,123 @@
     <header>
       <div>
         <h1>Expo Live Lens</h1>
-        <div class="status" id="status">Connecting...</div>
+        <p class="status" id="status">Dashboard starting...</p>
       </div>
+
       <div class="actions">
-        <button id="capture">Request screenshot</button>
+        <button id="capture">Capture now</button>
+        <button id="copyPrompt">Copy AI prompt</button>
         <button id="packet">Copy review packet</button>
-        <button id="clearLocal">Clear local view</button>
+        <button id="clearLocal">Reset view</button>
         <button id="clearServer">Clear server memory</button>
       </div>
     </header>
 
     <main>
-      <section class="panel">
-        <h2>Latest Screenshot</h2>
-        <div class="preview" id="preview">
-          <div class="empty">No screenshot received yet.</div>
-        </div>
-      </section>
+      <aside class="sidebar">
+        <section class="panel">
+          <h2>Start Here</h2>
+          <div class="summary">
+            <div class="step-list" id="onboardingList"></div>
+            <div class="summary-card">
+              <div class="eyebrow">Talk To Codex</div>
+              <strong>Ask me: "start the demo", "capture now", "mobile coach", "review mobile", or "review bugs"</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Recorded Sessions</h2>
+          <div class="summary">
+            <div class="summary-card">
+              <div class="eyebrow">Recording</div>
+              <strong id="sessionStatus">No active session</strong>
+            </div>
+            <div class="actions" style="justify-content: flex-start">
+              <button id="startSession">Start session</button>
+              <button id="stopSession">Stop session</button>
+              <button id="copySessionPrompt">Copy session prompt</button>
+            </div>
+            <div class="coach-list" id="sessionList"></div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Mobile Coach</h2>
+          <div class="summary">
+            <div class="summary-card">
+              <div class="eyebrow">Session Status</div>
+              <strong id="coachStatus">Waiting for app</strong>
+            </div>
+            <div>
+              <div class="eyebrow" style="margin-bottom: 8px">Next Best Actions</div>
+              <div class="coach-list" id="nextActionList"></div>
+            </div>
+            <div>
+              <div class="eyebrow" style="margin-bottom: 8px">Issues</div>
+              <div class="coach-list" id="issueList"></div>
+            </div>
+            <div>
+              <div class="eyebrow" style="margin-bottom: 8px">Quality Gates</div>
+              <div class="gate-grid" id="qualityGateList"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Review Context</h2>
+          <div class="summary">
+            <div class="summary-grid" id="summaryGrid"></div>
+            <div class="prompt-bar">
+              <div class="eyebrow">Prompt Mode</div>
+              <div class="prompt-modes" id="promptModes">
+                <button class="active" data-mode="quick">Quick</button>
+                <button data-mode="ui">UI</button>
+                <button data-mode="bug">Bug</button>
+                <button data-mode="polish">Polish</button>
+                <button data-mode="perf">Perf</button>
+                <button data-mode="mobile">Mobile</button>
+                <button data-mode="accessibility">A11y</button>
+              </div>
+            </div>
+            <div>
+              <div class="eyebrow" style="margin-bottom: 8px">Review Hints</div>
+              <div class="hint-list" id="hintList"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Latest Screenshot</h2>
+          <div class="preview" id="preview">
+            <div class="empty">No screenshot received yet.</div>
+          </div>
+          <div class="meta-row" id="previewMeta"></div>
+          <div class="screenshot-strip" id="screenshotStrip"></div>
+          <div class="health" id="healthMeta"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Replay Timeline</h2>
+          <div class="summary">
+            <div class="timeline-list" id="replayTimeline"></div>
+          </div>
+        </section>
+      </aside>
 
       <section class="panel">
         <h2>Live Events</h2>
-        <div class="tabs" id="tabs">
+        <div class="tabs" id="tabs" style="padding: 10px 12px; border-bottom: 1px solid var(--line)">
           <button class="active" data-tab="all">All</button>
+          <button data-tab="important">Important</button>
           <button data-tab="console">Logs</button>
           <button data-tab="network">Network</button>
           <button data-tab="error">Errors</button>
           <button data-tab="screenshot">Screenshots</button>
           <button data-tab="app-state">App</button>
+        </div>
+        <div class="event-toolbar">
+          <input class="search-input" id="eventSearch" type="search" placeholder="Search events, payloads, routes, URLs..." />
         </div>
         <div class="events" id="events"></div>
       </section>
@@ -224,13 +612,41 @@
       const statusEl = document.getElementById("status");
       const eventsEl = document.getElementById("events");
       const previewEl = document.getElementById("preview");
+      const previewMetaEl = document.getElementById("previewMeta");
+      const screenshotStripEl = document.getElementById("screenshotStrip");
+      const healthMetaEl = document.getElementById("healthMeta");
+      const summaryGridEl = document.getElementById("summaryGrid");
+      const hintListEl = document.getElementById("hintList");
+      const onboardingListEl = document.getElementById("onboardingList");
+      const sessionStatusEl = document.getElementById("sessionStatus");
+      const sessionListEl = document.getElementById("sessionList");
+      const startSessionButton = document.getElementById("startSession");
+      const stopSessionButton = document.getElementById("stopSession");
+      const copySessionPromptButton = document.getElementById("copySessionPrompt");
+      const coachStatusEl = document.getElementById("coachStatus");
+      const nextActionListEl = document.getElementById("nextActionList");
+      const issueListEl = document.getElementById("issueList");
+      const qualityGateListEl = document.getElementById("qualityGateList");
+      const replayTimelineEl = document.getElementById("replayTimeline");
+      const eventSearchEl = document.getElementById("eventSearch");
       const clearLocalButton = document.getElementById("clearLocal");
       const clearServerButton = document.getElementById("clearServer");
       const packetButton = document.getElementById("packet");
       const captureButton = document.getElementById("capture");
+      const copyPromptButton = document.getElementById("copyPrompt");
       const tabsEl = document.getElementById("tabs");
+      const promptModesEl = document.getElementById("promptModes");
       const localEvents = [];
       let activeTab = "all";
+      let activePromptMode = "quick";
+      let eventSearch = "";
+      let latestSummary = null;
+      let latestMobileInsights = null;
+      let screenshotCompare = null;
+      let sessionState = null;
+      let selectedScreenshotId = null;
+      let summaryRefreshTimer = null;
+      let connectionState = "connecting";
 
       clearLocalButton.addEventListener("click", () => {
         localEvents.length = 0;
@@ -240,20 +656,26 @@
       clearServerButton.addEventListener("click", async () => {
         await fetch("/api/events", { method: "DELETE" });
         localEvents.length = 0;
+        latestSummary = null;
+        latestMobileInsights = null;
+        screenshotCompare = null;
+        sessionState = null;
+        selectedScreenshotId = null;
         render();
+        await refreshSummary();
       });
 
       packetButton.addEventListener("click", async () => {
         const response = await fetch("/api/review-packet");
         const packet = await response.json();
         const text = JSON.stringify(packet, null, 2);
+        await copyText(text, "Review packet copied");
+      });
 
-        if (navigator.clipboard) {
-          await navigator.clipboard.writeText(text);
-          statusEl.textContent = "Review packet copied";
-        } else {
-          statusEl.textContent = "Clipboard unavailable; open /api/review-packet";
-        }
+      copyPromptButton.addEventListener("click", async () => {
+        const response = await fetch(`/api/review-prompt?mode=${encodeURIComponent(activePromptMode)}`);
+        const prompt = await response.json();
+        await copyText(prompt.prompt, `${prompt.label} prompt copied`);
       });
 
       captureButton.addEventListener("click", async () => {
@@ -265,6 +687,43 @@
           body: JSON.stringify({ reason: "dashboard" })
         });
         statusEl.textContent = "Screenshot requested";
+      });
+
+      startSessionButton.addEventListener("click", async () => {
+        const name = `Mobile flow ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
+        await fetch("/api/sessions/start", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json"
+          },
+          body: JSON.stringify({ name })
+        });
+        statusEl.textContent = "Session recording started";
+        await refreshSessions();
+      });
+
+      stopSessionButton.addEventListener("click", async () => {
+        await fetch("/api/sessions/stop", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json"
+          },
+          body: JSON.stringify({ reason: "dashboard" })
+        });
+        statusEl.textContent = "Session recording stopped";
+        await refreshSessions();
+      });
+
+      copySessionPromptButton.addEventListener("click", async () => {
+        const latestSession = sessionState?.sessions?.[0];
+        if (!latestSession) {
+          statusEl.textContent = "No session available yet";
+          return;
+        }
+
+        const response = await fetch(`/api/sessions/${encodeURIComponent(latestSession.id)}/review-prompt?mode=mobile`);
+        const prompt = await response.json();
+        await copyText(prompt.prompt, "Session review prompt copied");
       });
 
       tabsEl.addEventListener("click", (event) => {
@@ -280,6 +739,43 @@
         render();
       });
 
+      eventSearchEl.addEventListener("input", () => {
+        eventSearch = eventSearchEl.value.trim().toLowerCase();
+        render();
+      });
+
+      promptModesEl.addEventListener("click", (event) => {
+        const button = event.target.closest("button[data-mode]");
+        if (!button) {
+          return;
+        }
+
+        activePromptMode = button.dataset.mode;
+        for (const tab of promptModesEl.querySelectorAll("button")) {
+          tab.classList.toggle("active", tab === button);
+        }
+      });
+
+      screenshotStripEl.addEventListener("click", (event) => {
+        const button = event.target.closest("button[data-screenshot-id]");
+        if (!button) {
+          return;
+        }
+
+        selectedScreenshotId = button.dataset.screenshotId;
+        render();
+      });
+
+      async function copyText(text, successLabel) {
+        if (navigator.clipboard) {
+          await navigator.clipboard.writeText(text);
+          statusEl.textContent = successLabel;
+          return;
+        }
+
+        statusEl.textContent = "Clipboard unavailable; use the API endpoints directly";
+      }
+
       function formatPayload(payload) {
         if (!payload || Object.keys(payload).length === 0) {
           return "";
@@ -287,11 +783,327 @@
         return JSON.stringify(payload, null, 2);
       }
 
+      function renderOnboarding() {
+        onboardingListEl.innerHTML = "";
+
+        const hasEvents = Boolean(latestSummary?.eventCount);
+        const hasScreenshot = Boolean(latestSummary?.latestScreenshot);
+        const hasProblems = Boolean(latestSummary?.latestError || latestSummary?.network?.failed);
+        const steps = [
+          {
+            title: "Dashboard is live",
+            done: connectionState === "connected",
+            detail:
+              connectionState === "connected"
+                ? "This browser is connected to the local dashboard."
+                : "Waiting for the dashboard event stream."
+          },
+          {
+            title: "Connect your phone app",
+            done: hasEvents,
+            detail: hasEvents
+              ? "The app is sending events into Live Lens."
+              : 'Use the Codex action "Run Demo" or ask me "start the demo".'
+          },
+          {
+            title: "Get a current screen",
+            done: hasScreenshot,
+            detail: hasScreenshot
+              ? "A screenshot is ready for review."
+              : 'Tap "Capture now" or ask me "capture now" after changing the app.'
+          },
+          {
+            title: "Ask for review",
+            done: false,
+            detail: hasProblems
+              ? 'Ask me "review bugs" to triage the latest issues.'
+              : 'Ask me "review ui" or use "Copy AI prompt" with your preferred mode.'
+          }
+        ];
+
+        for (const step of steps) {
+          const item = document.createElement("div");
+          item.className = "step";
+          item.innerHTML = `
+            <div class="step-header">
+              <strong>${escapeHtml(step.title)}</strong>
+              <span class="step-status ${step.done ? "done" : "waiting"}">${step.done ? "Ready" : "Next"}</span>
+            </div>
+            <div class="step-copy">${escapeHtml(step.detail)}</div>
+          `;
+          onboardingListEl.appendChild(item);
+        }
+      }
+
+      function renderSessions() {
+        sessionListEl.innerHTML = "";
+        const activeSession = sessionState?.activeSession || null;
+        const sessions = sessionState?.sessions || [];
+
+        sessionStatusEl.textContent = activeSession
+          ? `${activeSession.name} recording`
+          : sessions[0]
+            ? `Last: ${sessions[0].name}`
+            : "No active session";
+        startSessionButton.disabled = Boolean(activeSession);
+        stopSessionButton.disabled = !activeSession;
+        copySessionPromptButton.disabled = sessions.length === 0;
+
+        if (sessions.length === 0) {
+          sessionListEl.innerHTML = '<div class="hint">Start a session before testing a flow.</div>';
+          return;
+        }
+
+        for (const session of sessions.slice(0, 5)) {
+          const item = document.createElement("div");
+          item.className = "coach-item";
+          item.innerHTML = `
+            <div class="coach-title">
+              <span>${escapeHtml(session.name)}</span>
+              <span class="chip">${escapeHtml(session.status)}</span>
+            </div>
+            <div class="coach-detail">${escapeHtml(formatTime(session.startedAt))}${
+              session.endedAt ? ` - ${escapeHtml(formatTime(session.endedAt))}` : ""
+            } | ${session.eventCount} events | ${session.screenshotCount} screenshots</div>
+            <div class="coach-detail">${session.errorCount} errors | ${session.network?.failed || 0} network failures</div>
+          `;
+          sessionListEl.appendChild(item);
+        }
+      }
+
+      function renderMobileCoach() {
+        const insights = latestMobileInsights || latestSummary?.mobileInsights;
+        nextActionListEl.innerHTML = "";
+        issueListEl.innerHTML = "";
+        qualityGateListEl.innerHTML = "";
+
+        if (!insights) {
+          coachStatusEl.textContent = "Waiting for app";
+          nextActionListEl.innerHTML = '<div class="hint">Connect the app, then this panel will prioritize what to do next.</div>';
+          issueListEl.innerHTML = '<div class="hint">No issues yet.</div>';
+          return;
+        }
+
+        coachStatusEl.textContent = insights.status || "unknown";
+
+        const nextActions = insights.nextActions?.length
+          ? insights.nextActions
+          : [
+              {
+                label: "Connect app",
+                command: "start-demo",
+                reason: "No useful mobile context is available yet."
+              }
+            ];
+
+        for (const action of nextActions.slice(0, 4)) {
+          const item = document.createElement("div");
+          item.className = "coach-item";
+          item.innerHTML = `
+            <div class="coach-title">
+              <span>${escapeHtml(action.label)}</span>
+              <span class="chip">${escapeHtml(action.command || "action")}</span>
+            </div>
+            <div class="coach-detail">${escapeHtml(action.reason || "")}</div>
+          `;
+          nextActionListEl.appendChild(item);
+        }
+
+        const issues = insights.issues?.length ? insights.issues : [];
+        if (issues.length === 0) {
+          issueListEl.innerHTML = '<div class="hint">No high-signal issues detected. This is a good moment for UI review.</div>';
+        } else {
+          for (const issue of issues.slice(0, 4)) {
+            const item = document.createElement("div");
+            item.className = `coach-item ${issue.severity || ""}`;
+            item.innerHTML = `
+              <div class="coach-title">
+                <span>${escapeHtml(issue.title)}</span>
+                <span class="chip">${escapeHtml(issue.severity || "info")}</span>
+              </div>
+              <div class="coach-detail">${escapeHtml(issue.detail || "")}</div>
+              <div class="coach-detail"><strong>Next:</strong> ${escapeHtml(issue.action || "")}</div>
+            `;
+            issueListEl.appendChild(item);
+          }
+        }
+
+        const gateLabels = {
+          screenshotReady: "Screenshot",
+          routeContextReady: "Route",
+          noRuntimeErrors: "Errors",
+          noNetworkFailures: "Network",
+          lowNoiseCapture: "Capture noise"
+        };
+
+        for (const [key, value] of Object.entries(insights.qualityGates || {})) {
+          const gate = document.createElement("div");
+          gate.className = `gate ${value ? "pass" : ""}`;
+          gate.textContent = `${gateLabels[key] || key}: ${value ? "ready" : "needs work"}`;
+          qualityGateListEl.appendChild(gate);
+        }
+      }
+
+      function renderReplayTimeline() {
+        replayTimelineEl.innerHTML = "";
+        const timeline = latestMobileInsights?.replayTimeline || latestSummary?.mobileInsights?.replayTimeline || [];
+
+        if (timeline.length === 0) {
+          replayTimelineEl.innerHTML = '<div class="hint">No timeline yet. Open the app and interact with it.</div>';
+          return;
+        }
+
+        for (const item of timeline.slice(0, 10)) {
+          const row = document.createElement("div");
+          const dotClass =
+            item.level === "error" || item.type === "error" || item.type === "network-error"
+              ? "error"
+              : item.type === "screenshot"
+                ? "screenshot"
+                : "";
+          row.className = "timeline-item";
+          if (item.hasImage) {
+            row.style.cursor = "pointer";
+            row.addEventListener("click", () => {
+              selectedScreenshotId = item.id;
+              render();
+            });
+          }
+          row.innerHTML = `
+            <div class="timeline-dot ${dotClass}"></div>
+            <div>
+              <div class="timeline-title">
+                <span>${escapeHtml(item.type || "event")}</span>
+                <span class="chip">${escapeHtml(item.screenName || item.device || "app")}</span>
+              </div>
+              <div class="timeline-detail">${escapeHtml(formatTime(item.receivedAt))}${
+                item.summary ? ` | ${escapeHtml(item.summary)}` : ""
+              }</div>
+            </div>
+          `;
+          replayTimelineEl.appendChild(row);
+        }
+      }
+
+      function renderSummary() {
+        summaryGridEl.innerHTML = "";
+        hintListEl.innerHTML = "";
+        previewMetaEl.innerHTML = "";
+        healthMetaEl.textContent = "";
+        renderOnboarding();
+        renderSessions();
+        renderMobileCoach();
+        renderReplayTimeline();
+
+        if (!latestSummary) {
+          hintListEl.innerHTML = '<div class="hint">No summary yet. Connect an app or request a screenshot.</div>';
+          return;
+        }
+
+        if (connectionState === "connected") {
+          statusEl.textContent = latestSummary.eventCount ? "Dashboard live. App connected." : "Dashboard live. Waiting for app.";
+        }
+
+        const cards = [
+          { label: "Screen", value: latestSummary.screenName || "Unknown" },
+          { label: "Route", value: latestSummary.route || "Unknown" },
+          { label: "Events", value: `${latestSummary.eventCount}` },
+          {
+            label: "Network",
+            value: latestSummary.network?.failed ? `${latestSummary.network.failed} failed` : "Healthy"
+          },
+          {
+            label: "Captures",
+            value: `${latestSummary.screenshot?.total || 0} total / ${latestSummary.screenshot?.skippedDuplicates || 0} skipped`
+          },
+          {
+            label: "Console",
+            value: `${latestSummary.console?.warn || 0} warn / ${latestSummary.console?.error || 0} error`
+          }
+        ];
+
+        for (const card of cards) {
+          const item = document.createElement("div");
+          item.className = "summary-card";
+          item.innerHTML = `<div class="eyebrow">${escapeHtml(card.label)}</div><strong>${escapeHtml(card.value)}</strong>`;
+          summaryGridEl.appendChild(item);
+        }
+
+        const hints = latestSummary.reviewHints?.length
+          ? latestSummary.reviewHints
+          : ["No special review hints right now. Quick review mode should be enough."];
+        for (const hint of hints) {
+          const row = document.createElement("div");
+          row.className = "hint";
+          row.textContent = hint;
+          hintListEl.appendChild(row);
+        }
+
+        if (latestSummary.latestScreenshot) {
+          const chips = [
+            latestSummary.latestScreenshot.screenName || "Unknown screen",
+            latestSummary.latestScreenshot.captureReason || "unknown capture",
+            latestSummary.latestScreenshot.device || "device unknown"
+          ];
+
+          for (const chipText of chips) {
+            const chip = document.createElement("div");
+            chip.className = "chip";
+            chip.textContent = chipText;
+            previewMetaEl.appendChild(chip);
+          }
+        }
+
+        healthMetaEl.textContent = `App state: ${latestSummary.appState || "unknown"} | Recent actions: ${
+          latestSummary.recentActions?.length || 0
+        }`;
+        renderOnboarding();
+        renderSessions();
+        renderMobileCoach();
+        renderReplayTimeline();
+      }
+
+      function getSelectedScreenshot() {
+        const retained = screenshotCompare?.retained || latestSummary?.screenshot?.retained || [];
+
+        if (selectedScreenshotId) {
+          return retained.find((item) => item.id === selectedScreenshotId) || null;
+        }
+
+        return screenshotCompare?.current || latestSummary?.latestScreenshot || null;
+      }
+
+      function renderScreenshotStrip() {
+        screenshotStripEl.innerHTML = "";
+        const retained = screenshotCompare?.retained || latestSummary?.screenshot?.retained || [];
+
+        for (const shot of retained) {
+          const button = document.createElement("button");
+          button.className = `shot-thumb ${shot.id === selectedScreenshotId ? "active" : ""}`;
+          button.dataset.screenshotId = shot.id;
+          button.title = `${shot.captureReason || "screenshot"} ${formatTime(shot.receivedAt)}`;
+          button.innerHTML = `<img alt="Screenshot thumbnail" src="${shot.imageUrl}" />`;
+          screenshotStripEl.appendChild(button);
+        }
+      }
+
       function render() {
         const latestScreenshot = localEvents.find((event) => event.type === "screenshot" && event.image);
+        const selectedScreenshot = getSelectedScreenshot();
+        const previousScreenshot = screenshotCompare?.previous;
         previewEl.innerHTML = "";
+        previewEl.classList.remove("compare");
 
-        if (latestScreenshot) {
+        if (selectedScreenshot && previousScreenshot && selectedScreenshot.id !== previousScreenshot.id && !selectedScreenshotId) {
+          previewEl.classList.add("compare");
+          previewEl.appendChild(createCompareFrame("Previous", previousScreenshot));
+          previewEl.appendChild(createCompareFrame("Current", selectedScreenshot));
+        } else if (selectedScreenshot) {
+          const image = document.createElement("img");
+          image.alt = "Selected app screenshot";
+          image.src = selectedScreenshot.imageUrl;
+          previewEl.appendChild(image);
+        } else if (latestScreenshot) {
           const image = document.createElement("img");
           image.alt = "Latest app screenshot";
           image.src = latestScreenshot.image;
@@ -302,6 +1114,8 @@
           empty.textContent = "No screenshot received yet.";
           previewEl.appendChild(empty);
         }
+
+        renderScreenshotStrip();
 
         eventsEl.innerHTML = "";
         for (const event of filteredEvents()) {
@@ -314,7 +1128,9 @@
 
           const meta = document.createElement("div");
           meta.className = "meta";
-          meta.textContent = `${event.receivedAt || ""}${event.screenName ? ` | ${event.screenName}` : ""}${event.device ? ` | ${event.device}` : ""}`;
+          meta.textContent = `${event.receivedAt || ""}${event.screenName ? ` | ${event.screenName}` : ""}${
+            event.device ? ` | ${event.device}` : ""
+          }`;
           row.appendChild(meta);
 
           const payloadText = formatPayload(event.payload);
@@ -326,22 +1142,62 @@
 
           eventsEl.appendChild(row);
         }
+
+        renderSummary();
+      }
+
+      function createCompareFrame(label, screenshot) {
+        const frame = document.createElement("div");
+        frame.className = "compare-frame";
+
+        const chip = document.createElement("div");
+        chip.className = "chip";
+        chip.textContent = `${label} | ${screenshot.captureReason || "capture"} | ${formatTime(screenshot.receivedAt)}`;
+        frame.appendChild(chip);
+
+        const image = document.createElement("img");
+        image.alt = `${label} app screenshot`;
+        image.src = screenshot.imageUrl;
+        frame.appendChild(image);
+
+        return frame;
       }
 
       function filteredEvents() {
-        if (activeTab === "all") {
-          return localEvents;
-        }
+        let source = localEvents;
 
         if (activeTab === "error") {
-          return localEvents.filter((event) => event.level === "error" || event.type === "error" || event.type === "network-error");
+          source = source.filter(
+            (event) =>
+              event.level === "error" ||
+              event.type === "error" ||
+              event.type === "network-error" ||
+              event.type === "screenshot-error"
+          );
+        } else if (activeTab === "important") {
+          source = source.filter(
+            (event) =>
+              event.level === "error" ||
+              event.level === "warn" ||
+              event.type === "error" ||
+              event.type === "network-error" ||
+              event.type === "screenshot-error" ||
+              event.type === "capture-request" ||
+              event.type === "demo-action"
+          );
+        } else if (activeTab === "network") {
+          source = source.filter((event) => event.type === "network" || event.type === "network-error");
+        } else if (activeTab === "screenshot") {
+          source = source.filter((event) => event.type.startsWith("screenshot"));
+        } else if (activeTab !== "all") {
+          source = source.filter((event) => event.type === activeTab);
         }
 
-        if (activeTab === "network") {
-          return localEvents.filter((event) => event.type === "network" || event.type === "network-error");
+        if (!eventSearch) {
+          return source;
         }
 
-        return localEvents.filter((event) => event.type === activeTab);
+        return source.filter((event) => JSON.stringify(event).toLowerCase().includes(eventSearch));
       }
 
       async function loadInitialEvents() {
@@ -351,15 +1207,56 @@
         render();
       }
 
+      async function refreshSummary() {
+        const response = await fetch("/api/summary");
+        latestSummary = await response.json();
+        renderSummary();
+      }
+
+      async function refreshMobileInsights() {
+        const response = await fetch("/api/mobile-insights");
+        latestMobileInsights = await response.json();
+        renderMobileCoach();
+      }
+
+      async function refreshScreenshotCompare() {
+        const response = await fetch("/api/screenshots/compare");
+        screenshotCompare = await response.json();
+        if (!screenshotCompare.retained?.some((item) => item.id === selectedScreenshotId)) {
+          selectedScreenshotId = null;
+        }
+      }
+
+      async function refreshSessions() {
+        const response = await fetch("/api/sessions");
+        sessionState = await response.json();
+        renderSessions();
+      }
+
+      function scheduleSummaryRefresh() {
+        window.clearTimeout(summaryRefreshTimer);
+        summaryRefreshTimer = window.setTimeout(() => {
+          Promise.all([refreshSummary(), refreshMobileInsights(), refreshScreenshotCompare(), refreshSessions()])
+            .then(() => render())
+            .catch((error) => {
+              statusEl.textContent = error.message;
+            });
+        }, 140);
+      }
+
       function connect() {
         const source = new EventSource("/api/events/stream");
 
         source.onopen = () => {
-          statusEl.textContent = "Connected";
+          connectionState = "connected";
+          statusEl.textContent = latestSummary?.eventCount ? "Dashboard live. App connected." : "Dashboard live. Waiting for app.";
+          renderOnboarding();
         };
 
         source.onerror = () => {
-          statusEl.textContent = "Reconnecting...";
+          connectionState = "reconnecting";
+          statusEl.textContent = "Reconnecting to local dashboard...";
+          renderOnboarding();
         };
 
         source.onmessage = (message) => {
@@ -368,14 +1265,46 @@
             localEvents.unshift(event);
             localEvents.splice(200);
             render();
+            scheduleSummaryRefresh();
           }
         };
       }
 
-      loadInitialEvents().catch((error) => {
-        statusEl.textContent = error.message;
-      });
-      connect();
+      function escapeHtml(value) {
+        return String(value)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#39;");
+      }
+
+      function formatTime(value) {
+        if (!value) {
+          return "";
+        }
+
+        try {
+          return new Date(value).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+          });
+        } catch {
+          return value;
+        }
+      }
+
+      Promise.all([loadInitialEvents(), refreshSummary(), refreshMobileInsights(), refreshScreenshotCompare(), refreshSessions()])
+        .then(() => {
+          connect();
+          render();
+          renderOnboarding();
+          renderSessions();
+        })
+        .catch((error) => {
+          statusEl.textContent = error.message;
+        });
     </script>
   </body>
 </html>

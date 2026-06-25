@@ -12,16 +12,16 @@ for a free Expo Live Lens workflow.
 | Basic device emulator | No | Use Android Emulator/iOS Simulator directly | Building an emulator is out of scope. |
 | Basic device settings | Partial | ADB for Android, simulator tooling for iOS/macOS | Expo Go alone cannot control OS settings. |
 | Connect mode | Yes | Local server URL, QR/deep link helper later | Works over LAN/tunnel. |
-| Expo Router integration | Yes | Optional hook reading current route | Add after base telemetry. |
+| Expo Router integration | Partial | Route events now work, deeper auto-detection still to do | Basic route context exists; richer router helpers can improve it. |
 | Network inspector | Yes | Patch fetch/XMLHttpRequest in dev | Works for JS network requests. Native module traffic is limited. |
 | Screenshots | Yes | react-native-view-shot or ADB screencap | Expo Go supports view screenshots with dependency installed. |
 | Screen recording | Android yes, iOS limited | ADB screenrecord, simulator tooling | Physical iOS on Windows is the hardest case. |
-| Replays | Yes | Timeline of events, logs, screenshots | MVP can store recent events in memory. |
+| Replays | Partial | Timeline, screenshots, and recorded sessions | Current sessions are in-memory and can export a review packet/prompt. |
 | Extended device emulator | No | Existing emulators | Not worth rebuilding. |
 | Advanced device settings | Partial | ADB/simulator commands | Platform-specific. |
 | Storybook integration | Later | Storybook adapter | Useful after isolated previews. |
 | Maestro testing integration | Later | Generate/run Maestro flows | Needs Maestro installed. |
-| AI assistant | Yes | Local review command/API using screenshots/logs | Requires model/provider integration. |
+| AI assistant | Yes | Local summary, mobile insights, review packet, and prompt API using screenshots/logs | Requires model/provider integration. |
 | Early access features | N/A | Project roadmap | Not relevant for an open local tool. |
 | Priority support | N/A | GitHub issues/docs | Not a product support layer. |
 
@@ -32,6 +32,11 @@ for a free Expo Live Lens workflow.
 3. Screenshot capture from app root
 4. Route/state event API
 5. Manual "AI review packet" export
+6. Copy-ready review prompts and duplicate screenshot suppression
+7. Mobile coach insights: issues, quality gates, timeline, and next actions
+8. Dashboard event search and replay timeline
+9. Screenshot history with before/after comparison
+10. Recorded sessions for reviewing complete flows
 
 ## Main Constraints
 

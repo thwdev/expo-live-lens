@@ -1,46 +1,105 @@
 # Expo Live Lens
 
-Expo Live Lens is a local live-review companion for Expo Go apps.
+**Open-source AI devtools for Expo Go and React Native. Inspect a real phone app with screenshots, logs, network events, replay sessions, and copy-ready prompts for Codex, Claude, or any AI coding agent.**
 
-It gives AI coding agents and developers a practical way to inspect a running
-Expo app without relying on a custom native build: screenshots, logs, app
-state, custom events, lightweight network summaries, and small review packets
-that stay on your machine.
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Expo SDK 54](https://img.shields.io/badge/Expo%20SDK-54-000020.svg)](https://expo.dev/)
+[![React Native](https://img.shields.io/badge/React%20Native-devtools-61dafb.svg)](https://reactnative.dev/)
+[![AI assisted](https://img.shields.io/badge/AI-Codex%20%2B%20Claude-blue.svg)](#agent-integrations)
 
-This project is aimed at a very specific pain:
+Expo Live Lens is a local, Expo Go-first live review dashboard for mobile developers who want an AI assistant to see what is actually happening inside the app.
 
-- you are building with Expo Go on a real phone
-- you want an AI to actually see what the app looks like
-- you do not want to manually describe every screen state
-- you do not want to stream huge screenshot payloads nonstop
+It helps with the annoying loop:
 
-Expo Live Lens is not trying to replace full IDE tooling. It is trying to make
-the loop from `running app -> inspect -> suggest fix -> edit code -> verify`
-feel immediate and local.
+```text
+run app on phone -> scan QR -> find bug/UI issue -> explain screen to AI -> edit code -> verify again
+```
 
-## Why It Exists
+Instead of manually describing every screen, Expo Live Lens gives your AI agent a small local context feed:
 
-Most AI coding workflows are strong at code and weak at runtime context.
-Expo Live Lens narrows that gap for Expo Go by turning the running app into a
-small local data source that tools like Codex can inspect safely.
+- screenshots on demand
+- console logs and runtime errors
+- app state and custom events
+- lightweight JS `fetch` network summaries
+- route/screen context
+- replay timeline
+- recorded mobile sessions
+- copy-ready AI review prompts
 
-The core design goals are:
+It is designed as a free, local, Radon-like companion for Expo Go workflows. It is not a full Radon replacement, native inspector, or cloud service. It is a practical bridge between your running Expo app and AI-assisted coding.
 
-- Expo Go first
-- local by default
-- manual or event-driven screenshots instead of constant streaming
-- small review payloads before large screenshots
-- easy handoff from app state to code changes
+## Contents
 
-## What Works Today
+- [Why Use It](#why-use-it)
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [Add To An Existing Expo App](#add-to-an-existing-expo-app)
+- [AI Review Workflow](#ai-review-workflow)
+- [Agent Integrations](#agent-integrations)
+- [Useful Commands](#useful-commands)
+- [API Endpoints](#api-endpoints)
+- [Privacy And Security](#privacy-and-security)
+- [Roadmap](#roadmap)
+
+## Why Use It
+
+Most AI coding assistants are strong with source code but weak with live mobile context. Expo Live Lens narrows that gap for Expo Go and React Native development.
+
+Use it when:
+
+- you build with Expo Go on a real iPhone or Android device
+- you want Codex, Claude, or another AI agent to review the visible screen
+- you want smaller prompts instead of dumping screenshots constantly
+- you want logs, errors, network activity, and screenshots in one local dashboard
+- you want to record a mobile flow and ask an AI what to fix next
+
+## Features
+
+### Live Expo Go dashboard
 
 - Local dashboard at `http://localhost:4317`
-- Expo Go client wrapper for screenshots, logs, app state, custom events, and JS network summaries
-- Manual-first screenshot capture to reduce memory, traffic, and token usage
-- `review:summary` for low-token AI context
-- `review:now` for fresh screenshot-on-demand review
-- Demo app targeting Expo SDK 54
-- Setup helper that copies the client into another Expo app
+- Works with physical devices over LAN
+- Server-sent event stream for live updates
+- Dashboard health endpoint for agents
+
+### AI-ready context
+
+- Low-token `summary.json`
+- Copy-ready review prompts for UI, bugs, polish, performance, accessibility, and mobile coaching
+- Mobile insights with issues, quality gates, strengths, and next actions
+- Review packets that combine latest screenshot metadata with recent events
+
+### Screenshots without token waste
+
+- Manual-first capture mode
+- Capture request button/API
+- Duplicate screenshot suppression
+- Configurable screenshot quality
+- Latest-vs-previous screenshot comparison
+- Retained screenshot history
+
+### Runtime debugging
+
+- Console log capture
+- Global error capture
+- App state events
+- Custom events from your app
+- JS `fetch` network summaries
+- Failed request detection
+
+### Replay sessions
+
+- Start and stop named mobile flow recordings
+- Pull a session packet after testing a flow
+- Generate a session-specific AI review prompt
+- Persist stopped sessions locally under `tmp/live-lens-sessions`
+
+### Agent workflow
+
+- Codex run actions in `.codex/environments/environment.toml`
+- Codex Skill in `skills/expo-live-lens`
+- Claude Code command in `.claude/commands/expo-live-lens.md`
+- Scripts for capture, review prompts, timeline, mobile insights, and sessions
 
 ## Architecture
 
@@ -48,12 +107,13 @@ The core design goals are:
 Expo Go app
   -> LiveLensRoot wrapper
   -> local dashboard server
-  -> summary + review packet + latest screenshot
-  -> AI/code review loop
+  -> summary, screenshots, timeline, sessions
+  -> Codex / Claude / AI review loop
+  -> code changes
+  -> fresh capture for verification
 ```
 
-Screenshots stay local by default. Review artifacts are written under `tmp/`,
-which is gitignored.
+Screenshots, review packets, and recorded sessions stay local by default. Generated review artifacts are written under `tmp/`, which is gitignored.
 
 ## Quick Start
 
@@ -69,13 +129,13 @@ Start the dashboard:
 npm.cmd run dev
 ```
 
-Open:
+Open the dashboard:
 
 ```text
 http://localhost:4317
 ```
 
-Start the SDK 54 demo app in another terminal:
+Start the Expo SDK 54 demo app in another terminal:
 
 ```cmd
 set EXPO_PUBLIC_LIVE_LENS_URL=http://YOUR_COMPUTER_IP:4317
@@ -84,24 +144,22 @@ npm.cmd run dev:demo:offline
 
 Scan the QR code with Expo Go.
 
-Pull the cheapest AI context first:
+Pull the smallest useful AI context first:
 
 ```bash
-npm.cmd run review:summary
+npm.cmd run mobile:insights
 ```
 
-Request a fresh screenshot review when needed:
+Request a fresh screenshot and review packet:
 
 ```bash
 npm.cmd run review:now
 ```
 
-This writes:
+Generated files are written to:
 
 ```text
-tmp/live-lens-review/summary.json
-tmp/live-lens-review/review-packet.json
-tmp/live-lens-review/latest-screenshot.jpg
+tmp/live-lens-review/
 ```
 
 ## Add To An Existing Expo App
@@ -112,7 +170,7 @@ Run the setup helper from this repository:
 npm run setup:app -- C:\path\to\your\expo-app
 ```
 
-Then install the screenshot dependency in the target app:
+Install the screenshot dependency in the target Expo app:
 
 ```bash
 npx expo install react-native-view-shot
@@ -141,15 +199,98 @@ export default function App() {
 
 For Expo Router, wrap your root `Stack` or `Slot` in `app/_layout.tsx`.
 
+The setup helper:
+
+- copies `src/dev/live-lens.tsx` into the target app
+- tries to auto-wrap `App.tsx` or `app/_layout.tsx`
+- writes a local backup before changing the entry file
+- writes `LIVE_LENS_SETUP.md` with a fallback snippet
+- detects a likely LAN IP for physical-device testing
+
+## AI Review Workflow
+
+### Quick UI review
+
+```bash
+npm.cmd run capture:now
+npm.cmd run review:prompt -- ui
+```
+
+Then ask your AI agent to use the generated prompt and latest screenshot.
+
+### Bug triage
+
+```bash
+npm.cmd run review:prompt -- bug
+```
+
+This focuses the AI on runtime errors, failed network requests, broken flows, and likely debugging steps.
+
+### Mobile development coach
+
+```bash
+npm.cmd run mobile:insights
+npm.cmd run review:mobile
+```
+
+This is the best default when you want a senior mobile-development style review across UX, state, runtime health, and testability.
+
+### Record a flow
+
+```bash
+npm.cmd run session:start
+# perform the flow on the phone
+npm.cmd run session:stop
+npm.cmd run session:pull
+```
+
+The session packet and prompt are saved under `tmp/live-lens-review/`.
+
+## Agent Integrations
+
+Expo Live Lens includes portable instructions for AI coding tools.
+
+### Codex
+
+- Codex Skill: [skills/expo-live-lens/SKILL.md](skills/expo-live-lens/SKILL.md)
+- Codex actions: [.codex/environments/environment.toml](.codex/environments/environment.toml)
+- Run scripts: [script/build_and_run.ps1](script/build_and_run.ps1) and [script/build_and_run.sh](script/build_and_run.sh)
+
+Copy the skill into `~/.codex/skills/expo-live-lens` or keep it in this repo for reference. Then you can ask:
+
+```text
+Use $expo-live-lens to inspect my running Expo app and suggest the next best mobile improvements.
+```
+
+### Claude Code
+
+- Claude command: [.claude/commands/expo-live-lens.md](.claude/commands/expo-live-lens.md)
+
+Use it as a project command/instruction for Claude Code so it follows the same capture, review, session, and privacy workflow.
+
+### Future MCP plugin
+
+A real MCP/plugin layer can expose dashboard actions as direct tools:
+
+- `health`
+- `capture_now`
+- `mobile_insights`
+- `start_session`
+- `stop_session`
+- `pull_session`
+- `review_prompt`
+
+The current skill/command approach is intentionally lightweight and GitHub-friendly while the API stabilizes.
+
 ## Capture Strategy
 
-Use `manual` for the lowest token and network usage:
+Use `manual` for the lowest network and token usage:
 
 ```tsx
 <LiveLensRoot serverUrl="http://YOUR_COMPUTER_IP:4317" captureMode="manual" />
 ```
 
-Use `interval` only when you really want periodic screenshots:
+Use `interval` only when you need periodic screenshots:
 
 ```tsx
 <LiveLensRoot
@@ -166,7 +307,7 @@ Disable screenshots on sensitive screens:
 <LiveLensRoot serverUrl="http://YOUR_COMPUTER_IP:4317" captureScreenshots={false} />
 ```
 
-Apps can also request a screenshot after important actions:
+Request a capture after important actions:
 
 ```tsx
 const lens = useLiveLens({ serverUrl: "http://YOUR_COMPUTER_IP:4317" });
@@ -175,8 +316,7 @@ lens.sendEvent("counter", { value: next });
 lens.requestCapture("counter");
 ```
 
-That pattern is a nice middle ground: no constant screenshot stream, but still a
-screen update after meaningful user actions.
+That pattern avoids constant screenshot streaming while still giving the AI a fresh screen after meaningful changes.
 
 ## Useful Commands
 
@@ -188,25 +328,55 @@ npm.cmd run dev:demo
 npm.cmd run dev:demo:offline
 npm.cmd run review:summary
 npm.cmd run review:pull
+npm.cmd run review:prompt -- ui
+npm.cmd run review:prompt -- bug
+npm.cmd run review:mobile
+npm.cmd run mobile:insights
+npm.cmd run timeline:pull
+npm.cmd run capture:now
+npm.cmd run session:start
+npm.cmd run session:stop
+npm.cmd run session:pull
 npm.cmd run review:now
 npm.cmd run check
 ```
 
-Use `review:summary` first when you want minimal AI context. Use `review:now`
-when you need a fresh screenshot.
+Use `mobile:insights` first when you want minimal AI context. Use `review:now` when you need a fresh screenshot. Use `session:*` commands when testing a real mobile flow.
 
 ## API Endpoints
+
+### Health and events
 
 - `GET /api/health`
 - `GET /api/events`
 - `DELETE /api/events`
 - `POST /api/events`
 - `GET /api/events/stream`
+
+### AI context
+
 - `GET /api/summary`
+- `GET /api/mobile-insights`
 - `GET /api/review-packet`
-- `GET /api/latest-screenshot.jpg`
+- `GET /api/review-prompt?mode=quick|ui|bug|polish|perf|mobile|accessibility`
+
+### Screenshots
+
 - `POST /api/capture-request`
 - `GET /api/capture-request`
+- `GET /api/latest-screenshot.jpg`
+- `GET /api/screenshots`
+- `GET /api/screenshots/compare`
+- `GET /api/screenshots/:id.jpg`
+
+### Timeline and sessions
+
+- `GET /api/timeline?limit=30`
+- `GET /api/sessions`
+- `POST /api/sessions/start`
+- `POST /api/sessions/stop`
+- `GET /api/sessions/:id/packet`
+- `GET /api/sessions/:id/review-prompt?mode=mobile`
 
 ## Current Limitations
 
@@ -215,44 +385,43 @@ when you need a fresh screenshot.
 - Full element-to-source inspection is not implemented yet.
 - Network inspection currently covers JS `fetch` calls only.
 - Setup helper copies the client instead of installing a published package.
-
-## Strong Ideas
-
-These are the ideas that feel most promising for turning this from a useful MVP
-into a genuinely strong developer tool:
-
-- AST-based setup that automatically wraps `App.tsx` or Expo Router layouts
-- richer `/api/summary` with interaction, performance, and route transitions
-- Expo Router helpers that auto-fill route and params
-- dashboard tabs with search, filters, and quick "copy Codex prompt"
-- publish `expo-live-lens-client` as a real package
-- publish a CLI such as `npx expo-live-lens setup` and `npx expo-live-lens review`
-- Android ADB helpers for screenshots, taps, and screen recording
-- replay timeline for "what changed before this bug"
-- redaction hooks for sensitive logs or network payloads
+- The MCP/plugin layer is planned but not implemented yet.
 
 ## Roadmap
 
-See [docs/roadmap.md](docs/roadmap.md).
-
 Near-term priorities:
 
-1. AST-based setup for `App.tsx` and Expo Router layouts
-2. richer route context and automatic Expo Router integration
-3. package and CLI publishing flow
-4. dashboard polish for logs, network, errors, and review workflows
-5. better summary and review prompting for AI-assisted edits
+1. Redaction controls for tokens, emails, private IPs, cookies, and sensitive payloads
+2. Retention settings for screenshots, events, and persisted sessions
+3. Safer AST-based setup for more Expo entrypoint patterns
+4. Published package and CLI, for example `npx expo-live-lens setup`
+5. MCP server/plugin tools for Codex, Claude, Cursor, and other agent clients
+6. Better Expo Router context, source-file hints, and replay-aware prompts
+
+See [docs/roadmap.md](docs/roadmap.md) for more ideas.
 
 ## Privacy And Security
 
-The dashboard is local, but it binds to `0.0.0.0` so physical phones can reach
-it over LAN. Use it only on trusted networks. Do not expose it to the public
-internet.
+The dashboard is local, but it binds to `0.0.0.0` so physical phones can reach it over LAN. Use it only on trusted networks. Do not expose it to the public internet.
 
-Screenshots and logs can contain sensitive data. See [SECURITY.md](SECURITY.md)
-for the current policy and recommended use.
+Screenshots, logs, network payloads, and session packets can contain sensitive data. Review artifacts are written under `tmp/`, which is gitignored, but you should still clear local data before switching to sensitive app work.
+
+See [SECURITY.md](SECURITY.md) for the current policy and recommended use.
+
+## SEO Keywords
+
+Expo Go devtools, React Native devtools, Expo debugging, Expo Go inspector, React Native inspector, AI mobile development, AI coding assistant, Codex Expo workflow, Claude Code Expo workflow, Expo Router debugging, mobile UI review, screenshot review, Radon alternative, local Expo dashboard.
 
 ## Contributing
+
+Issues and ideas are welcome. Good first areas:
+
+- privacy and redaction
+- setup helper improvements
+- Expo Router integration
+- dashboard UX
+- MCP/plugin tools
+- examples for real Expo apps
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).
 

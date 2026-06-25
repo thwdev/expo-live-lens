@@ -1,0 +1,75 @@
+version = 1
+name = "expo-live-lens"
+
+[setup]
+script = ""
+
+[[actions]]
+name = "Run"
+icon = "run"
+command = "powershell.exe -ExecutionPolicy Bypass -File ./script/build_and_run.ps1"
+
+[[actions]]
+name = "Run Demo"
+icon = "run"
+command = "powershell.exe -ExecutionPolicy Bypass -File ./script/build_and_run.ps1 demo"
+
+[[actions]]
+name = "Run Demo Offline"
+icon = "run"
+command = "powershell.exe -ExecutionPolicy Bypass -File ./script/build_and_run.ps1 demo-offline"
+
+[[actions]]
+name = "Review UI Prompt"
+icon = "tool"
+command = "powershell.exe -ExecutionPolicy Bypass -File ./script/build_and_run.ps1 review-ui"
+
+[[actions]]
+name = "Review Bug Prompt"
+icon = "tool"
+command = "powershell.exe -ExecutionPolicy Bypass -File ./script/build_and_run.ps1 review-bug"
+
+[[actions]]
+name = "Mobile Coach"
+icon = "tool"
+command = "powershell.exe -ExecutionPolicy Bypass -File ./script/build_and_run.ps1 mobile-insights"
+
+[[actions]]
+name = "Review Mobile"
+icon = "tool"
+command = "powershell.exe -ExecutionPolicy Bypass -File ./script/build_and_run.ps1 review-mobile"
+
+[[actions]]
+name = "Capture Now"
+icon = "tool"
+command = "powershell.exe -ExecutionPolicy Bypass -File ./script/build_and_run.ps1 capture-now"
+
+[[actions]]
+name = "Start Session"
+icon = "run"
+command = "powershell.exe -ExecutionPolicy Bypass -File ./script/build_and_run.ps1 session-start"
+
+[[actions]]
+name = "Stop Session"
+icon = "tool"
+command = "powershell.exe -ExecutionPolicy Bypass -File ./script/build_and_run.ps1 session-stop"
+
+[[actions]]
+name = "Pull Session"
+icon = "tool"
+command = "powershell.exe -ExecutionPolicy Bypass -File ./script/build_and_run.ps1 session-pull"
+
+[[actions]]
+name = "Pull Timeline"
+icon = "tool"
+command = "powershell.exe -ExecutionPolicy Bypass -File ./script/build_and_run.ps1 timeline"
+
+[[actions]]
+name = "Review Now"
+icon = "tool"
+command = "powershell.exe -ExecutionPolicy Bypass -File ./script/build_and_run.ps1 review-now"
+
+[[actions]]
+name = "Dashboard Health"
+icon = "tool"
+command = "powershell.exe -ExecutionPolicy Bypass -File ./script/build_and_run.ps1 health"

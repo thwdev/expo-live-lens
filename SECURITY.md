@@ -19,6 +19,7 @@ reporting process. Until then, report privately to the maintainer.
 - Do not expose the dashboard to the public internet.
 - Screenshots may contain personal data, API responses, tokens, or customer data.
 - Review packets are written under `tmp/`, which is gitignored.
+- Recorded sessions are stored under `tmp/live-lens-sessions`, which is gitignored.
 
 ## Recommended Use
 
@@ -26,3 +27,4 @@ reporting process. Until then, report privately to the maintainer.
 - Do not run on public Wi-Fi without firewall rules.
 - Do not paste review packets into public issues if screenshots/logs include sensitive data.
 - Turn off screenshots with `captureScreenshots={false}` for sensitive screens.
+- Clear sessions before sharing a machine or switching to sensitive app data.
