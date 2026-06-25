@@ -1,0 +1,39 @@
+{
+  "name": "expo-live-lens",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A lightweight Radon-like live companion for Expo Go and React Native development.",
+  "homepage": "https://github.com/thwdev/expo-live-lens#readme",
+  "bugs": {
+    "url": "https://github.com/thwdev/expo-live-lens/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thwdev/expo-live-lens.git"
+  },
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "examples/*"
+  ],
+  "scripts": {
+    "dev": "node src/server.mjs",
+    "dev:dashboard": "node src/server.mjs",
+    "dev:demo": "npm.cmd --prefix examples/demo-expo start",
+    "dev:demo:offline": "npm.cmd --prefix examples/demo-expo run start:offline",
+    "review:summary": "node scripts/pull-summary.mjs",
+    "review:pull": "node scripts/pull-review-packet.mjs",
+    "review:now": "node scripts/pull-review-packet.mjs --now",
+    "setup:app": "node scripts/setup-expo-app.mjs",
+    "start": "node src/server.mjs",
+    "check": "node --check src/server.mjs"
+  },
+  "keywords": [
+    "expo",
+    "react-native",
+    "devtools",
+    "ai",
+    "debugging"
+  ],
+  "license": "MIT"
+}

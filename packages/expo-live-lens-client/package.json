@@ -1,0 +1,13 @@
+{
+  "name": "expo-live-lens-client",
+  "version": "0.1.0",
+  "description": "Expo Go client hook for Expo Live Lens.",
+  "main": "src/index.tsx",
+  "types": "src/index.tsx",
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*",
+    "react-native-view-shot": "*"
+  },
+  "license": "MIT"
+}
